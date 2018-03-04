@@ -1,0 +1,39 @@
+{
+  "name": "Time Machine",
+  "scope": "./",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#ffd562",
+  "background_color": "#ffd562",
+  "icons": [{
+    "src": "components/images/Alarm Icon@0-75x.png",
+    "sizes": "36x36",
+    "type": "image/png"
+  },
+  {
+    "src": "components/images/Alarm Icon.png",
+    "sizes": "48x48",
+    "type": "image/png"
+  },
+  {
+    "src": "components/images/Alarm Icon@1-5x.png",
+    "sizes": "72x72",
+    "type": "image/png"
+  },
+  {
+    "src": "components/images/Alarm Icon@2x.png",
+    "sizes": "96x96",
+    "type": "image/png"
+  },
+  {
+    "src": "components/images/Alarm Icon@3x.png",
+    "sizes": "144x144",
+    "type": "image/png"
+  },
+  {
+    "src": "components/images/Alarm Icon@4x.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }]
+}

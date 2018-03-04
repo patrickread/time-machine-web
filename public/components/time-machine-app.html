@@ -1,0 +1,91 @@
+<link rel="import" href="../bower_components/note-app-elements/na-elements.html">
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+
+<link rel="import" href="time-machine-toolbar.html">
+<link rel="import" href="tm-alarm.html">
+<link rel="import" href="tm-alarm-editor.html">
+<link rel="import" href="tm-login.html">
+
+<dom-module id="time-machine-app">
+  <template>
+    <style include="note-app-shared-styles"></style>
+    <time-machine-toolbar
+      signed-in="[[signedIn]]"
+      on-sign-out="signOut">
+    </time-machine-toolbar>
+    <tm-login
+      on-sign-in="signIn"
+      signed-in="[[signedIn]]"
+      disabled="[[!online]]">
+    </tm-login>
+    <firebase-auth
+      id="auth"
+      app-name="time-machine"
+      provider="google"
+      signed-in="{{signedIn}}"
+      user="{{user}}">
+    </firebase-auth>
+    <paper-fab
+      icon="add"
+      on-tap="create"
+      disabled="[[!online]]"
+      aria-label="Add note">
+    </paper-fab>
+    <tm-alarm-editor
+      id="editor"
+      note="{{editableNote}}"
+      on-close="commitChange">
+    </tm-alarm-editor>
+    <firebase-document
+      id="document"
+      app-name="time-machine"
+      path="[[editableNoteId]]"
+      data="{{editableNote}}">
+    </firebase-document>
+    <firebase-query
+      id="query"
+      app-name="time-machine"
+      path="/notes/[[user.uid]]"
+      data="{{notes}}">
+    </firebase-query>
+    <app-indexeddb-mirror
+      session="[[user.uid]]"
+      key="notes"
+      data="{{notes}}"
+      persisted-data="{{persistedNotes}}">
+    </app-indexeddb-mirror>
+    <div class="notes">
+      <template is="dom-repeat" items="[[persistedNotes]]" as="alarm">
+        <tm-alarm
+          id$="[[alarm.$key]]"
+          title="[[alarm.title]]"
+          time="[[alarm.time]]"
+          activated="[[alarm.activated]]"
+          on-tap="edit">
+        </tm-alarm>
+      </template>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'time-machine-app',
+      behaviors: [Polymer.NoteAppBehavior],
+
+      signIn: function() {
+        this.$.auth.signInWithPopup();
+      },
+      get notesPath() {
+        return '/notes/' + this.user.uid;
+      },
+
+      toEditableId: function(noteId) {
+        return this.notesPath + '/' + noteId;
+      },
+
+      get isEditable() {
+        return this.online;
+      }
+    });
+  </script>
+</dom-module>
