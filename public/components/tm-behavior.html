@@ -20,13 +20,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      */
     Polymer.TimeMachineAppBehaviorImpl = {
       properties: {
-        editableNoteId: {
+        editableAlarmId: {
           type: String,
           notify: true
         }
       },
 
-      get notesPath() {
+      get alarmsPath() {
         return '';
       },
 
@@ -34,24 +34,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return true;
       },
 
-      toEditableId: function(noteId) {
-        return noteId;
+      toEditableId: function(alarmId) {
+        return alarmId;
       },
 
       edit: function(event) {
         if (this.isEditable) {
-          var noteElement = Polymer.dom(event).localTarget;
-          this.editableNoteId = this.toEditableId(noteElement.id);
+          var alarmElement = Polymer.dom(event).localTarget;
+          this.editableAlarmId = this.toEditableId(alarmElement.id);
 
           this.$.document.transactionsComplete.then(function() {
-            this.$.editor.open(noteElement);
+            this.$.editor.open(alarmElement);
           }.bind(this));
         }
       },
 
       create: function() {
         if (this.isEditable) {
-          this.editableNoteId = null;
+          this.editableAlarmId = null;
           this.$.editor.open();
         }
       },
@@ -79,8 +79,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       save: function() {
-        if (this.$.document.isNew && this.editableNote.title) {
-          return this.$.document.saveValue(this.notesPath).then(function() {
+        if (this.$.document.isNew && this.editableAlarm.title) {
+          return this.$.document.saveValue(this.alarmsPath).then(function() {
             this.$.document.reset();
           }.bind(this));
         }

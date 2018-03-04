@@ -87,10 +87,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     <div id="background"></div>
-    <tm-alarm id="note" title="{{note.title}}"
-      time="{{note.time}}"
-      activated="{{note.activated}}"
-      days="{{note.days}}"
+    <tm-alarm id="alarm" title="{{alarm.title}}"
+      time="{{alarm.time}}"
+      activated="{{alarm.activated}}"
+      days="{{alarm.days}}"
       editable></tm-alarm>
     <div class="controls">
       <paper-button on-tap="delete">Delete</paper-button>
@@ -102,7 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'tm-alarm-editor',
 
       properties: {
-        note: {
+        alarm: {
           type: Object,
           notify: true
         },
@@ -115,12 +115,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
       },
 
-      open: function(noteElement) {
+      open: function(alarmElement) {
         this._setOpened(true);
-        this.__editedNoteElement = noteElement;
-        if (noteElement) {
-          noteElement.style.opacity = 0;
-          this.transitionInFrom(noteElement.getBoundingClientRect());
+        this.__editedAlarmElement = alarmElement;
+        if (alarmElement) {
+          alarmElement.style.opacity = 0;
+          this.transitionInFrom(alarmElement.getBoundingClientRect());
         } else {
           this.create();
         }
@@ -128,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       create: function() {
         this._setOpened(true);
-        this.note = { title: '', time: moment().format('h:mm A'), activated: true, days: 7 };
+        this.alarm = { title: '', time: moment().format('h:mm A'), activated: true, days: 7 };
         this.transitionInFrom(this.getBoundingClientRect());
       },
 
@@ -141,9 +141,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       close: function(detail) {
-        if (this.__editedNoteElement) {
-          this.__editedNoteElement.style.opacity = 1;
-          this.__editedNoteElement = null;
+        if (this.__editedAlarmElement) {
+          this.__editedAlarmElement.style.opacity = 1;
+          this.__editedAlarmElement = null;
         }
 
         this.fire('close', detail, { bubbles: false });
@@ -159,7 +159,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             targetRect.width / 2 - 240 : 10;
         var targetWidth = targetRect.width > 500 ?
             '480px' : 'calc(100vw - 20px)'
-        var noteAnimation = this.$.note.animate([{
+        var alarmAnimation = this.$.alarm.animate([{
           transform: `translate(${rect.left}px,${rect.top - 46}px)`,
           width: `${rect.width}px`,
           easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
@@ -175,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           transform: `scale(${targetRect.width / 256 * 4})`
         }], 800);
 
-        noteAnimation.addEventListener('finish', function() {
+        alarmAnimation.addEventListener('finish', function() {
           Polymer.dom(this).classList.add('open');
         }.bind(this));
       },
@@ -188,7 +188,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           opacity: 0
         }], 300);
 
-        this.$.note.animate([{
+        this.$.alarm.animate([{
           transform: 'translateY(0) scale(1)',
           opacity: 1,
           easing: 'cubic-bezier(0.4, 0, 0.2, 1)'

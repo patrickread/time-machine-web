@@ -34,33 +34,33 @@
       icon="add"
       on-tap="create"
       disabled="[[!online]]"
-      aria-label="Add note">
+      aria-label="Add alarm">
     </paper-fab>
     <tm-alarm-editor
       id="editor"
-      note="{{editableNote}}"
+      alarm="{{editableAlarm}}"
       on-close="commitChange">
     </tm-alarm-editor>
     <firebase-document
       id="document"
       app-name="time-machine"
-      path="[[editableNoteId]]"
-      data="{{editableNote}}">
+      path="[[editableAlarmId]]"
+      data="{{editableAlarm}}">
     </firebase-document>
     <firebase-query
       id="query"
       app-name="time-machine"
-      path="/notes/[[user.uid]]"
-      data="{{notes}}">
+      path="/alarms/[[user.uid]]"
+      data="{{alarms}}">
     </firebase-query>
     <app-indexeddb-mirror
       session="[[user.uid]]"
-      key="notes"
-      data="{{notes}}"
-      persisted-data="{{persistedNotes}}">
+      key="alarms"
+      data="{{alarms}}"
+      persisted-data="{{persistedAlarms}}">
     </app-indexeddb-mirror>
-    <div class="notes">
-      <template is="dom-repeat" items="[[persistedNotes]]" as="alarm">
+    <div class="alarms">
+      <template is="dom-repeat" items="[[persistedAlarms]]" as="alarm">
         <tm-alarm
           id$="[[alarm.$key]]"
           title="[[alarm.title]]"
@@ -80,12 +80,12 @@
       signIn: function() {
         this.$.auth.signInWithPopup();
       },
-      get notesPath() {
-        return '/notes/' + this.user.uid;
+      get alarmsPath() {
+        return '/alarms/' + this.user.uid;
       },
 
-      toEditableId: function(noteId) {
-        return this.notesPath + '/' + noteId;
+      toEditableId: function(alarmId) {
+        return this.alarmsPath + '/' + alarmId;
       },
 
       get isEditable() {
