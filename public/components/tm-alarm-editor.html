@@ -87,7 +87,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
     <div id="background"></div>
-    <tm-alarm id="note" title="{{note.title}}" time="{{note.time}}" activated="{{note.activated}}" editable></tm-alarm>
+    <tm-alarm id="note" title="{{note.title}}"
+      time="{{note.time}}"
+      activated="{{note.activated}}"
+      days="{{note.days}}"
+      editable></tm-alarm>
     <div class="controls">
       <paper-button on-tap="delete">Delete</paper-button>
       <paper-button on-tap="save">Done</paper-button>
@@ -124,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       create: function() {
         this._setOpened(true);
-        this.note = { title: '', time: moment().format('h:mm A'), activated: true };
+        this.note = { title: '', time: moment().format('h:mm A'), activated: true, days: 7 };
         this.transitionInFrom(this.getBoundingClientRect());
       },
 

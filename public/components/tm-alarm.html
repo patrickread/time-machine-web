@@ -133,8 +133,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </iron-input>
       </div>
       <div class="form-section">
-        <paper-checkbox checked>Sun</paper-checkbox>
-        <paper-checkbox checked>Mon</paper-checkbox>
+        <iron-input bind-value="{{sunday}}">
+          <paper-checkbox checked="{{sunday}}">Sun</paper-checkbox>
+        </iron-input>
+
+        <iron-input bind-value="{{monday}}">
+          <paper-checkbox checked="{{monday}}">Mon</paper-checkbox>
+        </iron-input>
+
+        <iron-input bind-value="{{tuesday}}">
+          <paper-checkbox checked="{{tuesday}}">Tues</paper-checkbox>
+        </iron-input>
+
+        <iron-input bind-value="{{wednesday}}">
+          <paper-checkbox checked="{{wednesday}}">Wed</paper-checkbox>
+        </iron-input>
+
+        <iron-input bind-value="{{thursday}}">
+          <paper-checkbox checked="{{thursday}}">Thurs</paper-checkbox>
+        </iron-input>
+
+        <iron-input bind-value="{{friday}}">
+          <paper-checkbox checked="{{friday}}">Fri</paper-checkbox>
+        </iron-input>
+
+        <iron-input bind-value="{{saturday}}">
+          <paper-checkbox checked="{{saturday}}">Sat</paper-checkbox>
+        </iron-input>
       </div>
     </template>
     <template is="dom-if" if="[[!editable]]">
@@ -180,10 +205,142 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: true
         },
 
+        days: {
+          type: Number,
+          notify: true,
+          value: 7,
+          observer: '_daysOfTheWeekChanged'
+        },
+
+        daysOfTheWeek: {
+          type: Number,
+          notify: true,
+          value: 62
+        },
+
+        sunday: {
+          type: Boolean,
+          notify: true,
+          observer: '_sundayChanged'
+        },
+
+        monday: {
+          type: Boolean,
+          notify: true,
+          observer: '_mondayChanged'
+        },
+
+        tuesday: {
+          type: Boolean,
+          notify: true,
+          observer: '_tuesdayChanged'
+        },
+
+        wednesday: {
+          type: Boolean,
+          notify: true,
+          observer: '_wednesdayChanged'
+        },
+
+        thursday: {
+          type: Boolean,
+          notify: true,
+          observer: '_thursdayChanged'
+        },
+
+        friday: {
+          type: Boolean,
+          notify: true,
+          observer: '_fridayChanged'
+        },
+
+        saturday: {
+          type: Boolean,
+          notify: true,
+          observer: '_saturdayChanged'
+        },
+
         lastUpdated: {
           type: Number,
           value: 0
         }
+      },
+
+      _sundayChanged: function(newValue, oldValue) {
+        var dayPosition = 0;
+        this.individualDayChanged(dayPosition, newValue);
+      },
+
+      _mondayChanged: function(newValue, oldValue) {
+        var dayPosition = 1;
+        this.individualDayChanged(dayPosition, newValue);
+      },
+
+      _tuesdayChanged: function(newValue, oldValue) {
+        var dayPosition = 2;
+        this.individualDayChanged(dayPosition, newValue);
+      },
+
+      _wednesdayChanged: function(newValue, oldValue) {
+        var dayPosition = 3;
+        this.individualDayChanged(dayPosition, newValue);
+      },
+
+      _thursdayChanged: function(newValue, oldValue) {
+        var dayPosition = 4;
+        this.individualDayChanged(dayPosition, newValue);
+      },
+
+      _fridayChanged: function(newValue, oldValue) {
+        var dayPosition = 5;
+        this.individualDayChanged(dayPosition, newValue);
+      },
+
+      _saturdayChanged: function(newValue, oldValue) {
+        var dayPosition = 6;
+        this.individualDayChanged(dayPosition, newValue);
+      },
+
+      individualDayChanged: function(dayPosition, newValue) {
+        var daysOfTheWeekValue = this.days;
+        if (newValue) {
+          // set the flag
+          daysOfTheWeekValue |= (1 << dayPosition);
+        } else {
+          daysOfTheWeekValue &= ~(1 << dayPosition);
+        }
+
+        this.days = daysOfTheWeekValue;
+      },
+
+      _daysOfTheWeekChanged: function(newValue, oldValue) {
+        var sundayOn = 1;
+        var sundayValue = (newValue & sundayOn) === sundayOn;
+        this.sunday = sundayValue;
+
+        var mondayOn = 2;
+        var mondayValue = (newValue & mondayOn) === mondayOn;
+        this.monday = mondayValue;
+
+        var tuesdayOn = 4;
+        var tuesdayValue = (newValue & tuesdayOn) === tuesdayOn;
+        this.tuesday = tuesdayValue;
+
+        var wednesdayOn = 8;
+        var wednesdayValue = (newValue & wednesdayOn) === wednesdayOn;
+        this.wednesday = wednesdayValue;
+
+        var thursdayOn = 16;
+        var thursdayValue = (newValue & thursdayOn) === thursdayOn;
+        this.thursday = thursdayValue;
+
+        var fridayOn = 32;
+        var fridayValue = (newValue & fridayOn) === fridayOn;
+        this.friday = fridayValue;
+
+        var saturdayOn = 64;
+        var saturdayValue = (newValue & saturdayOn) === saturdayOn;
+        this.saturday = saturdayValue;
       },
 
       emptyClass: function(content) {
