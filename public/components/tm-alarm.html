@@ -55,6 +55,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: none;
       }
 
+      .low-opacity {
+        opacity: 0.5;
+      }
+
       h1 {
         font-size: 1.15em;
         margin: 0;
@@ -134,8 +138,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
     </template>
     <template is="dom-if" if="[[!editable]]">
-      <h1 class$="[[emptyClass(title)]]">[[title]]</h1>
-      <p class$="[[emptyClass(time)]]">[[time]]</p>
+      <div class$="[[isActivated(activated)]]">
+        <h1 class$="[[emptyClass(title)]]">[[title]]</h1>
+        <p class$="[[emptyClass(time)]]">[[time]]</p>
+      </div>
     </template>
 
   </template>
@@ -182,6 +188,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       emptyClass: function(content) {
         return !content ? 'hidden' : '';
+      },
+
+      isActivated: function(activated) {
+        return (activated) ? '' : "low-opacity";
       },
 
       propertiesAreEmpty: function() {

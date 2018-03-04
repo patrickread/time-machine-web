@@ -8,8 +8,8 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../app-storage/app-network-status-behavior.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/app-storage/app-network-status-behavior.html">
 
 <script>
   (function() {
@@ -79,9 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       save: function() {
-        if (this.$.document.isNew &&
-            (this.editableNote.title ||
-             this.editableNote.body)) {
+        if (this.$.document.isNew && this.editableNote.title) {
           return this.$.document.saveValue(this.notesPath).then(function() {
             this.$.document.reset();
           }.bind(this));
