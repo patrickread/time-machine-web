@@ -23,7 +23,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: none;
         position: absolute;
-        overflow: hidden;
+        overflow-y: scroll;
         top: 46px;
         left: 0;
         right: 0;
@@ -128,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       create: function() {
         this._setOpened(true);
-        this.alarm = { title: '', time: moment().format('h:mm A'), activated: true, days: 7 };
+        this.alarm = { title: '', time: moment().format('h:mm A'), activated: true, days: 62 };
         this.transitionInFrom(this.getBoundingClientRect());
       },
 

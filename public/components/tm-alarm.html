@@ -111,6 +111,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 20px 0px;
         min-height: 24px;
       }
+
+      .weekday {
+        max-width: 100px;
+        min-width: 45px;
+        float: left;
+        padding: 5px;
+        text-align: center;
+      }
+      .weekday:nth-of-type(1) {
+        display: none;
+      }
+
+      .weekday:nth-of-type(even) {
+        background: #eee;
+      }
     </style>
     <template is="dom-if" if="[[editable]]">
       <iron-input bind-value="{{title}}">
@@ -166,6 +181,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class$="[[isActivated(activated)]]">
         <h1 class$="[[emptyClass(title)]]">[[title]]</h1>
         <p class$="[[emptyClass(time)]]">[[time]]</p>
+        <p class$="[[emptyClass(days)]] weekdays">
+          <div class="weekday">
+          </div>
+          <template class="weekday" is="dom-if" if="[[sunday]]">
+            <div class="weekday">
+              Sun
+            </div>
+          </template>
+          <template class="weekday" is="dom-if" if="[[monday]]">
+            <div class="weekday">
+              Mon
+            </div>
+          </template>
+          <template is="dom-if" if="[[tuesday]]">
+            <div class="weekday">
+              Tues
+            </div>
+          </template>
+          <template is="dom-if" if="[[wednesday]]">
+            <div class="weekday">
+              Wed
+            </div>
+          </template>
+          <template is="dom-if" if="[[thursday]]">
+            <div class="weekday">
+              Thurs
+            </div>
+          </template>
+          <template is="dom-if" if="[[friday]]">
+            <div class="weekday">
+              Fri
+            </div>
+          </template>
+          <template is="dom-if" if="[[saturday]]">
+            <div class="weekday">
+              Sat
+            </div>
+          </template>
+        </p>
       </div>
     </template>
 
