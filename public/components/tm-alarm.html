@@ -112,19 +112,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         min-height: 24px;
       }
 
-      .weekday {
-        max-width: 100px;
-        min-width: 45px;
-        float: left;
-        padding: 5px;
-        text-align: center;
-      }
-      .weekday:nth-of-type(1) {
-        display: none;
-      }
-
-      .weekday:nth-of-type(even) {
-        background: #eee;
+      .weekdays {
+        margin: 0;
+        font-family: 'Roboto Slab', Times New Roman, serif;
+        font-size: 0.9em;
+        margin: 15px 0px;
       }
     </style>
     <template is="dom-if" if="[[editable]]">
@@ -181,45 +173,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class$="[[isActivated(activated)]]">
         <h1 class$="[[emptyClass(title)]]">[[title]]</h1>
         <p class$="[[emptyClass(time)]]">[[time]]</p>
-        <p class$="[[emptyClass(days)]] weekdays">
-          <div class="weekday">
-          </div>
-          <template class="weekday" is="dom-if" if="[[sunday]]">
-            <div class="weekday">
-              Sun
-            </div>
-          </template>
-          <template class="weekday" is="dom-if" if="[[monday]]">
-            <div class="weekday">
-              Mon
-            </div>
-          </template>
-          <template is="dom-if" if="[[tuesday]]">
-            <div class="weekday">
-              Tues
-            </div>
-          </template>
-          <template is="dom-if" if="[[wednesday]]">
-            <div class="weekday">
-              Wed
-            </div>
-          </template>
-          <template is="dom-if" if="[[thursday]]">
-            <div class="weekday">
-              Thurs
-            </div>
-          </template>
-          <template is="dom-if" if="[[friday]]">
-            <div class="weekday">
-              Fri
-            </div>
-          </template>
-          <template is="dom-if" if="[[saturday]]">
-            <div class="weekday">
-              Sat
-            </div>
-          </template>
-        </p>
+        <div class$="[[emptyClass(days)]] weekdays">
+          [[_allActiveDays(days)]]
+        </div>
       </div>
     </template>
 
@@ -236,12 +192,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         title: {
-          type: String,
-          notify: true,
-          value: ''
-        },
-
-        body: {
           type: String,
           notify: true,
           value: ''
@@ -264,12 +214,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           notify: true,
           value: 7,
           observer: '_daysOfTheWeekChanged'
-        },
-
-        daysOfTheWeek: {
-          type: Number,
-          notify: true,
-          value: 62
         },
 
         sunday: {
@@ -368,31 +312,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _daysOfTheWeekChanged: function(newValue, oldValue) {
-        var sundayOn = 1;
+        var sundayOn = this.sundayOn();
         var sundayValue = (newValue & sundayOn) === sundayOn;
         this.sunday = sundayValue;
 
-        var mondayOn = 2;
+        var mondayOn = this.mondayOn();
         var mondayValue = (newValue & mondayOn) === mondayOn;
         this.monday = mondayValue;
 
-        var tuesdayOn = 4;
+        var tuesdayOn = this.tuesdayOn();
         var tuesdayValue = (newValue & tuesdayOn) === tuesdayOn;
         this.tuesday = tuesdayValue;
 
-        var wednesdayOn = 8;
+        var wednesdayOn = this.wednesdayOn();
         var wednesdayValue = (newValue & wednesdayOn) === wednesdayOn;
         this.wednesday = wednesdayValue;
 
-        var thursdayOn = 16;
+        var thursdayOn = this.thursdayOn();
         var thursdayValue = (newValue & thursdayOn) === thursdayOn;
         this.thursday = thursdayValue;
 
-        var fridayOn = 32;
+        var fridayOn = this.fridayOn();
         var fridayValue = (newValue & fridayOn) === fridayOn;
         this.friday = fridayValue;
 
-        var saturdayOn = 64;
+        var saturdayOn = this.saturdayOn();
         var saturdayValue = (newValue & saturdayOn) === saturdayOn;
         this.saturday = saturdayValue;
       },
@@ -412,6 +356,68 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
         return true;
+      },
+
+      _allActiveDays: function(days) {
+        var daysArray = [];
+
+        if ((days & this.sundayOn()) === this.sundayOn()) {
+          daysArray.push("Sunday");
+        }
+
+        if ((days & this.mondayOn()) === this.mondayOn()) {
+          daysArray.push("Monday");
+        }
+
+        if ((days & this.tuesdayOn()) === this.tuesdayOn()) {
+          daysArray.push("Tuesday");
+        }
+
+        if ((days & this.wednesdayOn()) === this.wednesdayOn()) {
+          daysArray.push("Wednesday");
+        }
+
+        if ((days & this.thursdayOn()) === this.thursdayOn()) {
+          daysArray.push("Thursday");
+        }
+
+        if ((days & this.fridayOn()) === this.fridayOn()) {
+          daysArray.push("Friday");
+        }
+
+        if ((days & this.saturdayOn()) === this.saturdayOn()) {
+          daysArray.push("Saturday");
+        }
+
+        return daysArray.join(", ")
+      },
+
+      sundayOn: function() {
+        return 1;
+      },
+
+      mondayOn: function() {
+        return 2;
+      },
+
+      tuesdayOn: function() {
+        return 4;
+      },
+
+      wednesdayOn: function() {
+        return 8;
+      },
+
+      thursdayOn: function() {
+        return 16;
+      },
+
+      fridayOn: function() {
+        return 32;
+      },
+
+      saturdayOn: function() {
+        return 64;
       }
     })
   </script>
