@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="tm-alarm.html">
 
@@ -96,6 +97,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-button on-tap="delete">Delete</paper-button>
       <paper-button on-tap="save">Done</paper-button>
     </div>
+    <paper-toast id="timeUntilToast" text="Hello world!"></paper-toast>
   </template>
   <script>
     Polymer({
@@ -134,6 +136,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       save: function() {
         this.close('save');
+        const newTime = this.$.alarm.time;
+        const newDays = this.$.alarm.days;
+        const nextAlarmFire = this.calculateNextAlarmFire(newTime, newDays);
+        const timeString = this.timeStringUntil(nextAlarmFire);
+        this.$.timeUntilToast.open();
       },
 
       delete: function() {
@@ -200,6 +207,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return new Promise(function(resolve) {
           animation.addEventListener('finish', resolve);
         }.bind(this));
+      },
+
+      timeStringUntil: function(datetime) {
+        const now = moment();
+        const days = Math.floor(datetime.diff(now) / (3600 * 24 * 1000));
+        let newDate = datetime.add(-1 * days * 3600 * 24, 'second');
+        const hours = Math.floor(newDate.diff(now) / (3600 * 1000));
+        newDate = newDate.add(-1 * hours * 3600, 'second');
+        const minutes = Math.floor(newDate.diff(now) / (60 * 1000));
+        newDate = newDate.add(-1 * minutes * 60, 'second');
+        const seconds = Math.floor(newDate.diff(now) / 1000);
+
+        let timeUntil = "";
+        if (days > 0) {
+          timeUntil += " " + days + " days";
+        }
+
+        timeUntil += " " + hours + " hours";
+        timeUntil += " " + minutes + " minutes";
+        timeUntil += " " + seconds + " seconds";
+        return timeUntil.trim();
+      },
+
+      calculateNextAlarmFire: function(alarmTime, daysNumber) {
+        let dayNumberList = this.getDays(daysNumber);
+        let daysList = this.getDateObjects(dayNumberList, alarmTime);
+        return daysList[0];
+      },
+
+      getDateObjects: function(dayNumberList, alarmTime) {
+        let timeObj = moment(alarmTime, "hh:mm a");
+        let datesObjs = dayNumberList.map((dayNumber) => {
+          let date;
+          if (moment().isoWeekday() <= dayNumber) {
+            date = moment().isoWeekday(dayNumber)
+          } else {
+            date = moment().add(1, 'weeks').isoWeekday(dayNumber)
+          }
+
+          date.set({
+            "hour": timeObj.get('hour'),
+            "minute": timeObj.get('minute'),
+            "second": 0
+          })
+          return date
+        })
+
+        return datesObjs.sort(function (left, right) {
+          return moment.utc(left.timeStamp).diff(moment.utc(right.timeStamp))
+        });
+      },
+
+      getDays: function(daysNumber) {
+        let days = [];
+        for(var i=0; i<7; i++) {
+          if ((daysNumber & Math.pow(2, i)) === Math.pow(2, i)) {
+            days.push(i)
+          }
+        }
+
+        return days;
       }
     });
   </script>
