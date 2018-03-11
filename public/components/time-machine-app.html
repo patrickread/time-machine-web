@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
@@ -39,7 +40,8 @@
     <tm-alarm-editor
       id="editor"
       alarm="{{editableAlarm}}"
-      on-close="commitChange">
+      on-close="commitChange"
+      on-saved="alarmSaved">
     </tm-alarm-editor>
     <firebase-document
       id="document"
@@ -71,6 +73,7 @@
         </tm-alarm>
       </template>
     </div>
+    <paper-toast id="toast"></paper-toast>
   </template>
   <script>
     Polymer({
@@ -86,6 +89,34 @@
 
       toEditableId: function(alarmId) {
         return this.alarmsPath + '/' + alarmId;
+      },
+
+      alarmSaved: function(event) {
+        let nextAlarmFire = event.detail.nextFire;
+        const timeString = this.timeStringUntil(nextAlarmFire);
+        this.$.toast.text = "Alarm will go off in " + timeString;
+        this.$.toast.open();
+      },
+
+      timeStringUntil: function(datetime) {
+        const now = moment();
+        const days = Math.floor(datetime.diff(now) / (3600 * 24 * 1000));
+        let newDate = datetime.add(-1 * days * 3600 * 24, 'second');
+        const hours = Math.floor(newDate.diff(now) / (3600 * 1000));
+        newDate = newDate.add(-1 * hours * 3600, 'second');
+        const minutes = Math.floor(newDate.diff(now) / (60 * 1000));
+        newDate = newDate.add(-1 * minutes * 60, 'second');
+        const seconds = Math.floor(newDate.diff(now) / 1000);
+
+        let timeUntil = "";
+        if (days > 0) {
+          timeUntil += " " + days + " days";
+        }
+
+        timeUntil += " " + hours + " hours";
+        timeUntil += " " + minutes + " minutes";
+        timeUntil += " " + seconds + " seconds";
+        return timeUntil.trim();
       },
 
       get isEditable() {
