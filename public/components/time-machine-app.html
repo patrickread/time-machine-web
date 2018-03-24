@@ -95,6 +95,7 @@
         let nextAlarmFire = event.detail.nextFire;
         const timeString = this.timeStringUntil(nextAlarmFire);
         this.$.toast.text = "Alarm will go off in " + timeString;
+        this.$.toast.duration = 10000;
         this.$.toast.open();
       },
 
@@ -106,7 +107,6 @@
         newDate = newDate.add(-1 * hours * 3600, 'second');
         const minutes = Math.floor(newDate.diff(now) / (60 * 1000));
         newDate = newDate.add(-1 * minutes * 60, 'second');
-        const seconds = Math.floor(newDate.diff(now) / 1000);
 
         let timeUntil = "";
         if (days > 0) {
@@ -115,7 +115,6 @@
 
         timeUntil += " " + hours + " hours";
         timeUntil += " " + minutes + " minutes";
-        timeUntil += " " + seconds + " seconds";
         return timeUntil.trim();
       },
 

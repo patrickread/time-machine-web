@@ -218,6 +218,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           let date;
           if (moment().isoWeekday() <= dayNumber) {
             date = moment().isoWeekday(dayNumber)
+
+            if (moment().isoWeekday() === dayNumber) {
+              // If it's today, check if hour and minute are later than now
+              if (timeObj.get('hour') < moment().get('hour') || (
+                timeObj.get('hour') === moment().get('hour') &&
+                timeObj.get('minute') <= moment().get('minute')
+              )) {
+                date = moment().add(1, 'weeks').isoWeekday(dayNumber)
+              }
+            }
           } else {
             date = moment().add(1, 'weeks').isoWeekday(dayNumber)
           }
@@ -231,7 +241,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         })
 
         return datesObjs.sort(function (left, right) {
-          return moment.utc(left.timeStamp).diff(moment.utc(right.timeStamp))
+          return left.utc().diff(right.utc())
         });
       },
 
