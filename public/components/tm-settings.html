@@ -1,0 +1,109 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-styles/shadow.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-input/iron-input.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+
+<dom-module id="tm-settings">
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-sizing: border-box;
+        background-color: #fafafa;
+        color: #212121;
+        padding: 1em;
+        @apply --paper-font-common-base;
+        @apply --shadow-elevation-2dp;
+        border-radius: 2px;
+        margin: 10px;
+        min-width: 200px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .low-opacity {
+        opacity: 0.5;
+      }
+
+      h1 {
+        font-size: 1.15em;
+        margin: 0;
+        white-space: pre-wrap;
+      }
+
+      h1:not(.hidden)+p {
+        margin-top: 1em;
+      }
+
+      p {
+        margin: 0;
+        font-family: 'Roboto Slab', Times New Roman, serif;
+        font-size: 0.9em;
+        white-space: pre-wrap;
+      }
+
+      .placeholder:after {
+        content: 'Tap to edit';
+        opacity: 0.5;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .empty {
+        font-style: italic;
+        color: #737373;
+        line-height: 0;
+        pointer-events: none;
+      }
+
+      input {
+        display: block;
+        box-sizing: border-box;
+        width: 100%;
+        margin: 0;
+        outline: none;
+        border: 0;
+        background: transparent;
+        white-space: pre-wrap;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        font-size: 1.15em;
+        font-weight: bold;
+        color: #212121;
+      }
+
+      .form-section {
+        margin: 20px 0px;
+        min-height: 24px;
+      }
+    </style>
+    <h1>Settings</h1>
+    <div class="form-section">
+        <iron-input bind-value="{{temperatureType}}">
+          <paper-radio-group selected="F">
+            <paper-radio-button name="F">F</paper-radio-button>
+            <paper-radio-button name="C">C</paper-radio-button>
+          </paper-radio-group>
+        </iron-input>
+    </div>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'tm-settings',
+
+      properties: {
+        temperatureType: {
+          type: String,
+          reflectToAttribute: true,
+          value: 'F'
+        },
+      },
+    })
+  </script>
+</dom-module>

@@ -11,13 +11,15 @@
 <link rel="import" href="tm-login.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="tm-behavior.html">
+<link rel="import" href="tm-settings.html">
 
 <dom-module id="time-machine-app">
   <template>
     <style include="tm-app-shared-styles"></style>
     <time-machine-toolbar
       signed-in="[[signedIn]]"
-      on-sign-out="signOut">
+      on-sign-out="signOut"
+      on-toggle-settings="toggleSettings">
     </time-machine-toolbar>
     <tm-login
       on-sign-in="signIn"
@@ -61,7 +63,7 @@
       data="{{alarms}}"
       persisted-data="{{persistedAlarms}}">
     </app-indexeddb-mirror>
-    <div class="alarms">
+    <div class="alarms" hidden$="[[settingsOpen]]">
       <template is="dom-repeat" items="[[persistedAlarms]]" as="alarm">
         <tm-alarm
           id$="[[alarm.$key]]"
@@ -73,12 +75,27 @@
         </tm-alarm>
       </template>
     </div>
+    <div class="settings-area" hidden$="[[!settingsOpen]]">
+      <div class="settings">
+          <tm-settings
+            id$="settings">
+          </tm-settings>
+      </div>
+    </div>
     <paper-toast id="toast"></paper-toast>
   </template>
   <script>
     Polymer({
       is: 'time-machine-app',
       behaviors: [Polymer.TimeMachineAppBehavior],
+
+      properties: {
+        settingsOpen: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false
+        }
+      },
 
       signIn: function() {
         this.$.auth.signInWithPopup();
@@ -116,6 +133,10 @@
         timeUntil += " " + hours + " hours";
         timeUntil += " " + minutes + " minutes";
         return timeUntil.trim();
+      },
+
+      toggleSettings: function() {
+        return this.settingsOpen = !this.settingsOpen;
       },
 
       get isEditable() {

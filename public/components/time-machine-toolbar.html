@@ -51,6 +51,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <iron-icon icon="alarm"></iron-icon>
     <h1>Time Machine</h1>
+    <paper-icon-button
+        icon="build"
+        on-tap="toggleSettings">
+    </paper-icon-button>
     <iron-icon icon="cloud" hidden$="[[!online]]"></iron-icon>
     <iron-icon icon="cloud-off" hidden$="[[online]]"></iron-icon>
     <paper-icon-button
@@ -81,6 +85,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       lock: function() {
         this.fire('sign-out');
+      },
+
+      toggleSettings: function() {
+        this.fire('toggle-settings');
       }
     });
   </script>
